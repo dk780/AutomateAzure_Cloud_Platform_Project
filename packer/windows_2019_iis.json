@@ -1,0 +1,53 @@
+{
+    "variables": {
+        "client_id": "d2879289-3591-4eb8-be03-57fc6eae1c7c",
+        "client_secret": "66axlx-sIfIP4FH0.qPev.4Yb2Ny6_0.WD",
+        "sensitive-variables": "66axlx-sIfIP4FH0.qPev.4Yb2Ny6_0.WD",
+        "tenant_id": "bde07727-35a5-419d-ac56-c87285c1dfee",
+        "subscription_id": "ed873cb3-9ca1-49a4-ba77-3405a6d50ab8"
+    },
+    "builders": [
+        {
+            "type": "azure-arm",
+            "client_id": "{{user `client_id`}}",
+            "client_secret": "{{user `client_secret`}}",
+            "tenant_id": "{{user `tenant_id`}}",
+            "subscription_id": "{{user `subscription_id`}}",
+            "os_type": "Windows",
+            "image_publisher": "MicrosoftWindowsServer",
+            "image_offer": "WindowsServer",
+            "image_sku": "2019-Datacenter",
+            "image_version": "latest",
+            "managed_image_resource_group_name": "packerRG",
+            "managed_image_name": "WINDOWS2019IMG",
+            "disk_caching_type": "ReadWrite",
+            "communicator": "winrm",
+            "winrm_use_ssl": true,
+            "winrm_insecure": true,
+            "winrm_timeout": "20m",
+            "winrm_username": "packer",
+            "location": "West Europe",
+            "vm_size": "Standard_A2_v2",
+            "azure_tags": {
+                "dept": "IT"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "powershell",
+            "inline": [
+                "Write-Host 'Configuring IIS Role and sysprepping...'"
+            ]
+        },
+        {
+            "type": "powershell",
+            "script": "./scripts/iis-install.ps1"
+        },
+    
+        {
+            "type": "powershell",
+            "script": "./scripts/iis-sysprep.ps1"
+        }
+    ]
+}
